@@ -35,3 +35,31 @@ exports.getProblemById = async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch problem' });
     }
 };
+
+// Update problem by ID
+exports.updateProblem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedProblem = await Problem.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updatedProblem) {
+            return res.status(404).json({ error: 'Problem not found' });
+        }
+        res.status(200).json({ message: 'Problem updated successfully', updatedProblem });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to update problem', details: err.message });
+    }
+};
+
+// Delete problem by ID
+exports.deleteProblem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedProblem = await Problem.findByIdAndDelete(id);
+        if (!deletedProblem) {
+            return res.status(404).json({ error: 'Problem not found' });
+        }
+        res.status(200).json({ message: 'Problem deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to delete problem', details: err.message });
+    }
+};

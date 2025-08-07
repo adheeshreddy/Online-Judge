@@ -1,33 +1,20 @@
-const express = require('express');
+// ✅ server.js
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const app = require('./app'); // Import the app from app.js
 
-const app = express();
-const port = 5000;
+const PORT = 5000;
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
-
-// MongoDB Connection
+// MongoDB connection
 mongoose.connect('mongodb://localhost:27017/online_judge', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}).then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.error(err));
-
-// Define the submission route
-app.post('/api/submit', (req, res) => {
-  const { userId, problemId, code, language } = req.body;
-  if (!userId || !problemId || !code || !language) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
-
-  // Example: just respond back for now
-  res.json({ message: 'Submission received', data: req.body });
-});
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+})
+.then(() => {
+  console.log('✅ MongoDB connected');
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
+  });
+})
+.catch((err) => {
+  console.error('❌ MongoDB connection error:', err);
 });
